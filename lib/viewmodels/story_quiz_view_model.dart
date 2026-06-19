@@ -9,10 +9,8 @@ enum QuizStatus { hidden, visible, wrongAnswer, correctAnswer }
 class StoryQuizViewModel extends ChangeNotifier {
   final FlutterTts _flutterTts = FlutterTts();
 
-  // Story text
   final String storyText = "Once upon a time, a clever little robot named Pip lost his shiny blue gear in the Whispering Woods...";
 
-  // Data-driven quiz JSON
   final String _quizJson = '''
   {
     "question": "What colour was Pip the Robot's lost gear?",
@@ -57,7 +55,7 @@ class StoryQuizViewModel extends ChangeNotifier {
 
     _flutterTts.setCompletionHandler(() {
       _ttsStatus = TtsStatus.idle;
-      _quizStatus = QuizStatus.visible; // Reveal quiz smoothly
+      _quizStatus = QuizStatus.visible;
       notifyListeners();
     });
 
@@ -67,20 +65,17 @@ class StoryQuizViewModel extends ChangeNotifier {
       notifyListeners();
     });
 
-    // Attempt to find a sweet female voice
     await _setupFemaleVoice();
   }
 
   Future<void> _setupFemaleVoice() async {
     try {
-      // Set Indian English by default as it is the target audience, fallback to US English
       await _flutterTts.setLanguage("en-IN");
-      await _flutterTts.setSpeechRate(0.45); // Slower for kids
-      await _flutterTts.setPitch(1.1); // Slightly higher pitch for a sweet/friendly tone
+      await _flutterTts.setSpeechRate(0.45);
+      await _flutterTts.setPitch(1.1);
 
       dynamic voices = await _flutterTts.getVoices;
       if (voices != null && voices is List) {
-        // Look for en-IN or en-US female voices
         List<Map<String, String>> enVoices = [];
         for (var voice in voices) {
           try {
@@ -95,25 +90,22 @@ class StoryQuizViewModel extends ChangeNotifier {
           } catch (_) {}
         }
 
-        // Try to find a voice with 'female' in its name/meta
         Map<String, String>? selectedVoice;
         for (var voice in enVoices) {
           final name = voice['name']!.toLowerCase();
           final locale = voice['locale']!.toLowerCase();
           
-          // Specific sweet female voices on Android (e.g. en-in-x-ahp-local, en-us-x-sfg-local)
           if (name.contains('female') || 
               name.contains('zira') || 
               name.contains('samantha') || 
               name.contains('siri') ||
-              name.contains('sfg') || // Google high-quality US female
-              name.contains('ahp')) { // Google high-quality IN female
+              name.contains('sfg') ||
+              name.contains('ahp')) {
             selectedVoice = voice;
             break;
           }
         }
 
-        // Fallback to any en-IN voice, then en-US
         selectedVoice ??= enVoices.firstWhere(
           (v) => v['locale']!.startsWith('en-IN'),
           orElse: () => enVoices.firstWhere(
@@ -143,13 +135,11 @@ class StoryQuizViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Re-apply speed/pitch configuration
       await _flutterTts.setSpeechRate(0.45);
       await _flutterTts.setPitch(1.15);
 
       var result = await _flutterTts.speak(storyText);
       if (result == 0) {
-        // 0 means failure in some native platforms
         throw Exception("Could not start speech engine");
       }
     } catch (e) {
@@ -173,7 +163,6 @@ class StoryQuizViewModel extends ChangeNotifier {
       _quizStatus = QuizStatus.correctAnswer;
     } else {
       _quizStatus = QuizStatus.wrongAnswer;
-      // We will revert back to visible after a brief delay so they can try again
       Future.delayed(const Duration(milliseconds: 1000), () {
         if (_quizStatus == QuizStatus.wrongAnswer) {
           _quizStatus = QuizStatus.visible;

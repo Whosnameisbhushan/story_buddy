@@ -23,7 +23,6 @@ class _BuddyWidgetState extends State<BuddyWidget> with TickerProviderStateMixin
   void initState() {
     super.initState();
 
-    // Floating animation (idle state)
     _floatController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 3),
@@ -33,7 +32,6 @@ class _BuddyWidgetState extends State<BuddyWidget> with TickerProviderStateMixin
       CurvedAnimation(parent: _floatController, curve: Curves.easeInOut),
     );
 
-    // Jump/Bounce animation (correct answer celebration)
     _bounceController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -59,13 +57,11 @@ class _BuddyWidgetState extends State<BuddyWidget> with TickerProviderStateMixin
         final ttsPlaying = viewModel.ttsStatus == TtsStatus.playing;
         final quizCorrect = viewModel.quizStatus == QuizStatus.correctAnswer;
 
-        // Trigger bounce animation when transitioning to correctAnswer state
         if (viewModel.quizStatus == QuizStatus.correctAnswer && _lastStatus != QuizStatus.correctAnswer) {
           _bounceController.forward(from: 0.0);
         }
         _lastStatus = viewModel.quizStatus;
 
-        // Speed up floating / bobbing if talking (TTS is playing)
         if (ttsPlaying) {
           _floatController.duration = const Duration(seconds: 1);
           if (!_floatController.isAnimating) {
@@ -85,17 +81,14 @@ class _BuddyWidgetState extends State<BuddyWidget> with TickerProviderStateMixin
         return AnimatedBuilder(
           animation: Listenable.merge([_floatController, _bounceController]),
           builder: (context, child) {
-            // Apply bounce translation and idle floating translation
             final floatOffset = _floatAnimation.value;
             final bounceOffset = _bounceAnimation.value;
 
-            // Talk pulse scale: while playing TTS, scale up and down slightly to simulate talking
             double scale = 1.0;
             if (ttsPlaying) {
               scale = 1.0 + (math.sin(_floatController.value * 2 * math.pi) * 0.04);
             }
 
-            // Rotate buddy slightly when happy
             double angle = 0.0;
             if (quizCorrect && _bounceController.isAnimating) {
               angle = math.sin(_bounceController.value * 3 * math.pi) * 0.15;
@@ -128,7 +121,6 @@ class _BuddyWidgetState extends State<BuddyWidget> with TickerProviderStateMixin
                         imagePath,
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) {
-                          // Fallback container with a cute text representation if assets fail to render
                           return Container(
                             color: quizCorrect ? Colors.amber[100] : Colors.blue[100],
                             alignment: Alignment.center,

@@ -18,15 +18,14 @@ class StoryScreen extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFF1F0FF), // Extremely soft pastel indigo
-              Color(0xFFFFF9E6), // Extremely soft pastel yellow/cream
+              Color(0xFFF1F0FF),
+              Color(0xFFFFF9E6),
             ],
           ),
         ),
         child: SafeArea(
           child: Stack(
             children: [
-              // Main content scrollable view
               Consumer<StoryQuizViewModel>(
                 builder: (context, viewModel, child) {
                   final isQuizVisible = viewModel.quizStatus != QuizStatus.hidden;
@@ -37,7 +36,6 @@ class StoryScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // Custom App Header
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -72,16 +70,10 @@ class StoryScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 24),
-
-                        // Center AI Buddy character
                         const BuddyWidget(),
                         const SizedBox(height: 24),
-
-                        // Story display and narration trigger
                         const StoryCard(),
                         const SizedBox(height: 20),
-
-                        // Animated reveal of the Quiz
                         AnimatedSize(
                           duration: const Duration(milliseconds: 600),
                           curve: Curves.easeInOutBack,
@@ -93,16 +85,12 @@ class StoryScreen extends StatelessWidget {
                                 : const SizedBox.shrink(),
                           ),
                         ),
-                        
-                        // Buffer space at bottom so contents aren't blocked by success dialog
                         const SizedBox(height: 120),
                       ],
                     ),
                   );
                 },
               ),
-
-              // Full screen confetti & success card overlay
               const CelebrationOverlay(),
             ],
           ),

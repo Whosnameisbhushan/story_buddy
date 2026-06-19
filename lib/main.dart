@@ -4,7 +4,6 @@ import 'viewmodels/story_quiz_view_model.dart';
 import 'views/story_screen.dart';
 
 void main() {
-  // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
   
   runApp(
@@ -30,10 +29,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF6C63FF),
           primary: const Color(0xFF6C63FF),
-          secondary: const Color(0xFFFFB74D), // Soft warm orange
-          background: const Color(0xFFFCF9F2), // Cozy cream background
+          secondary: const Color(0xFFFFB74D),
+          background: const Color(0xFFFCF9F2),
         ),
-        fontFamily: 'Outfit', // A beautiful, rounded kid-friendly font family
+        fontFamily: 'Outfit',
         textTheme: const TextTheme(
           titleLarge: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple),
           bodyLarge: TextStyle(color: Colors.black87),

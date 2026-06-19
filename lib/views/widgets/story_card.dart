@@ -23,7 +23,6 @@ class StoryCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Story header
                 Row(
                   children: [
                     Container(
@@ -51,8 +50,6 @@ class StoryCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-
-                // Narrative Text
                 Text(
                   viewModel.storyText,
                   style: const TextStyle(
@@ -63,8 +60,6 @@ class StoryCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-
-                // Narration Action Button
                 AnimatedSize(
                   duration: const Duration(milliseconds: 300),
                   child: Column(
@@ -91,8 +86,6 @@ class StoryCard extends StatelessWidget {
                           children: _buildButtonContent(ttsStatus),
                         ),
                       ),
-                      
-                      // Error feedback banner
                       if (hasError) ...[
                         const SizedBox(height: 12),
                         Container(

@@ -38,7 +38,6 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
           return const SizedBox.shrink();
         }
 
-        // Trigger shake and haptic feedback on wrong answer
         if (viewModel.quizStatus == QuizStatus.wrongAnswer && _lastStatus != QuizStatus.wrongAnswer) {
           _shakeController.forward(from: 0.0);
           HapticFeedback.vibrate();
@@ -52,7 +51,6 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
         return AnimatedBuilder(
           animation: _shakeController,
           builder: (context, child) {
-            // Horizontal shake math: sin wave sweeping 4 times
             final double shakeOffset = math.sin(_shakeController.value * 4 * math.pi) * 12.0;
 
             return Transform.translate(
@@ -68,7 +66,6 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Question indicator
                       Row(
                         children: [
                           Container(
@@ -96,8 +93,6 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
                         ],
                       ),
                       const SizedBox(height: 20),
-
-                      // Question Text
                       Text(
                         quiz.question,
                         style: const TextStyle(
@@ -107,8 +102,6 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
                         ),
                       ),
                       const SizedBox(height: 20),
-
-                      // Data-driven Options List
                       Column(
                         children: List.generate(quiz.options.length, (index) {
                           final option = quiz.options[index];
@@ -130,7 +123,6 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
                               borderSide = BorderSide.none;
                             }
                           } else if (isCorrect && isOptionCorrect) {
-                            // Highlight correct answer if they succeeded
                             buttonColor = Colors.green[100]!;
                             textColor = Colors.green[900]!;
                             borderSide = BorderSide(color: Colors.green[300]!);
@@ -142,7 +134,7 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
                               width: double.infinity,
                               child: OutlinedButton(
                                 onPressed: isCorrect
-                                    ? null // Disable taps after correct answer
+                                    ? null
                                     : () => viewModel.selectOption(option),
                                 style: OutlinedButton.styleFrom(
                                   backgroundColor: buttonColor,
@@ -166,7 +158,7 @@ class _QuizCardState extends State<QuizCard> with SingleTickerProviderStateMixin
                                         shape: BoxShape.circle,
                                       ),
                                       child: Text(
-                                        String.fromCharCode(65 + index), // A, B, C, D...
+                                        String.fromCharCode(65 + index),
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: isSelected ? Colors.white : Colors.black54,

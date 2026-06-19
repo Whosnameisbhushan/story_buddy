@@ -32,7 +32,6 @@ class _CelebrationOverlayState extends State<CelebrationOverlay> {
       builder: (context, viewModel, child) {
         final isCorrect = viewModel.quizStatus == QuizStatus.correctAnswer;
 
-        // Trigger confetti when transition to correctAnswer happens
         if (isCorrect && _lastStatus != QuizStatus.correctAnswer) {
           _confettiController.play();
         } else if (!isCorrect && _lastStatus == QuizStatus.correctAnswer) {
@@ -43,7 +42,6 @@ class _CelebrationOverlayState extends State<CelebrationOverlay> {
         return Stack(
           alignment: Alignment.topCenter,
           children: [
-            // Center Top Confetti
             Align(
               alignment: Alignment.topCenter,
               child: ConfettiWidget(
@@ -62,8 +60,6 @@ class _CelebrationOverlayState extends State<CelebrationOverlay> {
                 gravity: 0.15,
               ),
             ),
-
-            // Success dialog box overlay
             if (isCorrect)
               Positioned(
                 bottom: 20,
